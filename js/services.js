@@ -19,7 +19,7 @@ app.service('ReminderService', function($http){
 
 app.service('getService', function($http){
 	this.getReminder = function(callGood, callBad, blob){
-		var url = 'https://jsonblob.com/api/jsonBlob/' + blob;
+		var url = 'https://jsonblob.com/api/jsonblob/' + blob;
 		console.log(url);
 		$http.get(url).then(funGood, funBad);
 		function funGood(response){
@@ -45,5 +45,21 @@ app.service('getService', function($http){
 // 	}
 // 	}
 // }
+
+app.service('updateService', function($http){
+	this.updateReminder = function(callGood, callBad, blob, reminder){
+		var url = 'https://jsonblob.com/api/jsonblob/' + blob;
+		console.log("us url in " + url);
+		$http.put(url, reminder).then(funGood, funBad);
+		function funGood(response){
+			callGood(response.status);
+			console.log("from updateService " + response);
+		}
+		function funBad(response){
+			callBad(response.status);
+			console.log("status from updateService " + response.statusText);
+		}
+	}
+});
 
 

@@ -6,7 +6,7 @@
 
 //fc2e78d1-bdf5-11e6-871b-4f6c7f682805
 
-app.controller('majorTom', function($scope, ReminderService,getService){
+app.controller('majorTom', function($scope, ReminderService,getService, updateService){
 
 $scope.$on("$ionicView.beforeEnter", function(){
    // handle event
@@ -27,7 +27,7 @@ $scope.$on("$ionicView.beforeEnter", function(){
 	}
 
 }
-  //call a service with $scope.blobId,
+  //deal with getItem response
 
   function reminder(response){
   		//$scope.reminder.title = response.title;
@@ -58,27 +58,24 @@ $scope.$on("$ionicView.beforeEnter", function(){
 	// }
 
 	//$scope.exists = false;
-
+//priority
 	$scope.getPriority = function(prior){
 		$scope.reminder.priority = prior;
 		console.log($scope.reminder.priority);
-		//console.log(prior);
-		console.log($scope.reminder.title);
-		console.log($scope.reminder.description);
-		console.log($scope.reminder.complete);
+		
 	}
 
 
-
+//make Reminder
 	$scope.makeReminder = function(){
 		$scope.reminder = $scope.reminder;
 		ReminderService.makeReminder(responseGood, responseBad, $scope.reminder)
 		//$scope.exists = true;
 	};
-
+//deal with makeReminder response, set in local storage
 	function responseGood(response){
-		//$scope.theId = response;
-		$scope.blobID = response.headers("x-jsonblob")
+		$scope.exists = true;
+		$scope.blobID = response.headers("x-jsonblob");
 		//send blobID to StorageService
 		console.log($scope.blobID);
 		console.log(response.data);
@@ -92,59 +89,45 @@ $scope.$on("$ionicView.beforeEnter", function(){
 	}
 
 
-	// $scope.clearStorage = function(){
-	// 	localStorage.clear();
-	// }
-	// $scope.getPriority = function(reminder.priority){
-	// 	//$scope.reminder.priority = reminder.priority;
-	// // 	console.log("rem prior is " + reminder.priority);
-	// // 		console.log($scope.reminder.title);
-	// // console.log($scope.reminder.desc);
-	// // console.log($scope.reminder.priority);
+$scope.updateReminder = function(){
+//call service to update blob
+	updateService.updateReminder(rGood, rBad, $scope.theBlob, $scope.reminder);
+}
+function rGood(response){
+	alert("updated");
+		//$scope.blobID = response.headers("x-jsonblob");
+// getService.getReminder(reminder, noReminder, $scope.blobID);
+// console.log(response.headers("x-jsonblob"));
+ 	getService.getReminder(good, bad, $scope.theBlob);
+		function good(response){
+			$scope.reminder = {
+  			title: response.data.title,
+  			description: response.data.description,
+  			priority: response.data.priority,
+  			complete: response.data.complete
+  			}
+  			console.log("marie" + $scope.reminder.title + response.data.title);
+		}
+		function bad(response){
+			console.log("from bad function in update reminder " + response.status);
+		}
 
-	// }
 
-// function Reminder(name, desc, priority){
-// 		this.name = name;
-// 		this.desc = desc;
-// 		this.getPriority = function(priority){
-// 			$scope.priority = priority;}
-// 			;
-// 		// this.done = complete;
-// 		// this.
-// }	
-// 	$scope.makeReminder = function(name, desc,priority){
-// 	$scope.reminder = 	new Reminder(name,desc);
-// 	console.log($scope.reminder.title);
-// 	console.log($scope.reminder.desc);
-// 	console.log($scope.priority);
-	
-// 	}
-// $scope.updateReminder = function(){
-// //call service to update blob
-// getService.getReminder(rGood, rBad, $scope.theBlob);
+}
 
-// function rGood(){
-// 
-// };
-// function rBad(){
+function rBad(response){
+	console.log("from rBad " + response.status);
+}
 
-// }
-// }
+ // $scope.deleteReminder = function(){
+ // 	//call service
+ // 	//scope.exists to false
+	// localStorage.clear();	
+ // }
 
-// $scope.deleteReminder = function(){
-//  getService.deleteReminder(rGood, rBad, $scope.theBlob);
+//  $scope.deleteReminder = function(){
 
-//  function rGood(response){
-// console.log(response);
-//  };
-//  function rBad(response){
-// 	console.log(response);
 //  }
-// }
-
-// //localStorage.clear();	
-// }
 	
 
 });
