@@ -60,6 +60,22 @@ app.service('updateService', function($http){
 			console.log("status from updateService " + response.statusText);
 		}
 	}
+
+});
+
+app.service('DeleteService', function($http){
+	this.deleteReminder= function(success, error, blob){
+		var url = 'https://jsonblob.com/api/jsonblob/' + blob;
+		$http.delete(url).then(good, bad);
+		function good(response)	{
+			success(response);
+			console.log(response);
+		}
+		function bad(response){
+			error(response);
+			console.log(response.status);
+		}
+	}
 });
 
 

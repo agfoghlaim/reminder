@@ -6,7 +6,7 @@
 
 //fc2e78d1-bdf5-11e6-871b-4f6c7f682805
 
-app.controller('majorTom', function($scope, ReminderService,getService, updateService){
+app.controller('majorTom', function($scope, ReminderService,getService, updateService, DeleteService){
 
 $scope.$on("$ionicView.beforeEnter", function(){
    // handle event
@@ -119,15 +119,31 @@ function rBad(response){
 	console.log("from rBad " + response.status);
 }
 
- // $scope.deleteReminder = function(){
- // 	//call service
- // 	//scope.exists to false
-	// localStorage.clear();	
- // }
+ $scope.deleteReminder = function(){
+ 	//call servic
+ 	
+ 	DeleteService.deleteReminder(good, bad, $scope.theBlob);
+ 	function good(response){
+ 	$scope.exists = false;
+ 	localStorage.clear();
+ 	console.log(response.status);
+ 		$scope.reminder = {
+		title: '',
+		description: '',
+		priority: '',
+		complete: false
+		
 
-//  $scope.deleteReminder = function(){
+	}
+ 	}
+ 	function bad(response){
+ 	console.log(response.status);
 
-//  }
+ 	}
+		
+ }
+
+
 	
 
 });
